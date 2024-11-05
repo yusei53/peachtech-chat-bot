@@ -1,3 +1,9 @@
+import Chat from "./componets/chat/chat";
+
 export default function Home() {
-  return <div>tevfそ；mんst</div>;
+  return (
+    <>
+      <Chat />
+    </>
+  );
 }
