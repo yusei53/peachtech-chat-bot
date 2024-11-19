@@ -18,25 +18,11 @@ const Chat = () => {
           display={"flex"}
           flexDirection={"column"}
         >
-<<<<<<< HEAD
           <Box display={"flex"} justifyContent={"center"}>
             <Typography fontSize="17px">Peach.Tech Bot</Typography>
           </Box>
 
           <Box
-=======
-          <Box
-            height={"8vh"}
-            display={"flex"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
-            <Typography sx={{ fontSize: "17px" }}>Peach.Tech Bot</Typography>
-          </Box>
-
-          <Box
-            height={"77vh"}
->>>>>>> 5b36bbe7db2c8b1ce7e2df071acb6a75a901c664
             overflow={"auto"}
             sx={{
               "&::-webkit-scrollbar": { display: "none" },
