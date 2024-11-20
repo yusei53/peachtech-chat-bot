@@ -1,4 +1,6 @@
+import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
+import Image from "next/image";
 
 type Message = {
   user: string;
@@ -11,6 +13,60 @@ type MessageListProps = {
 };
 
 const MessageList: React.FC<MessageListProps> = ({ messages, loading }) => {
+  const [displayedText, setDisplayedText] = useState<string>("");
+  const [currentIcon, setCurrentIcon] = useState<string>("/yuse.jpg");
+  const [iconIntervalId, setIconIntervalId] = useState<NodeJS.Timeout | null>(
+    null
+  );
+
+  useEffect(() => {
+    if (loading) {
+      const icons = ["/yuse.jpg", "/yuse2.jpg"];
+      let iconIndex = 0;
+
+      const intervalId = setInterval(() => {
+        iconIndex = (iconIndex + 1) % icons.length;
+        setCurrentIcon(icons[iconIndex]);
+      }, 500);
+
+      setIconIntervalId(intervalId);
+    } else if (iconIntervalId) {
+      clearInterval(iconIntervalId);
+      setIconIntervalId(null);
+    }
+
+    return () => {
+      if (iconIntervalId) clearInterval(iconIntervalId);
+    };
+  }, [loading]);
+
+  useEffect(() => {
+    if (!messages.length) {
+      setDisplayedText("");
+      return;
+    }
+
+    const latestMessage = messages[messages.length - 1];
+
+    if (latestMessage.user === "You") {
+      setDisplayedText(latestMessage.text);
+    } else {
+      let textIndex = -1;
+      setDisplayedText("");
+
+      const textInterval = setInterval(() => {
+        setDisplayedText((prev) => prev + latestMessage.text[textIndex]);
+        textIndex++;
+
+        if (textIndex + 1 >= latestMessage.text.length) {
+          clearInterval(textInterval);
+        }
+      }, 40);
+
+      return () => clearInterval(textInterval);
+    }
+  }, [messages]);
+
   return (
     <Box
       padding={2}
@@ -24,12 +80,23 @@ const MessageList: React.FC<MessageListProps> = ({ messages, loading }) => {
         "&::-webkit-scrollbar": { display: "none" },
       }}
     >
+      {/* メッセージリスト */}
       {messages.map((message, index) => (
         <Box
           key={index}
-          textAlign={message.user === "You" ? "right" : "left"}
+          display={"flex"}
+          justifyContent={message.user === "You" ? "flex-end" : "flex-start"}
           padding={1}
         >
+          {message.user !== "You" && index === messages.length - 1 && (
+            <Image
+              src={currentIcon}
+              alt="AI Icon"
+              width="55"
+              height="55"
+              style={{ borderRadius: "50%" }}
+            />
+          )}
           <Typography
             bgcolor={message.user === "You" ? "#F4F4F4" : undefined}
             py={1}
@@ -37,14 +104,24 @@ const MessageList: React.FC<MessageListProps> = ({ messages, loading }) => {
             borderRadius={20}
             display={"inline-block"}
           >
-            {message.text}
+            {index === messages.length - 1 && message.user !== "You"
+              ? displayedText
+              : message.text}
           </Typography>
         </Box>
       ))}
 
+      {/* ローディング中 */}
       {loading && (
-        <Box textAlign={"center"} padding={1}>
-          <Typography>Loading...</Typography>
+        <Box display="flex" alignItems={"center"} padding={1}>
+          <Image
+            src={currentIcon}
+            alt="Loading Icon"
+            width="55"
+            height="55"
+            style={{ borderRadius: "50%" }}
+          />
+          <Typography variant="body1">ゆせくん考え中...</Typography>
         </Box>
       )}
     </Box>
