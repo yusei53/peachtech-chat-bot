@@ -80,6 +80,18 @@ const MessageList: React.FC<MessageListProps> = ({ messages, loading }) => {
         "&::-webkit-scrollbar": { display: "none" },
       }}
     >
+      {messages.length === 0 && (
+        <Typography
+          fontWeight={"bold"}
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          mt={15}
+          fontSize={20}
+        >
+          Welcome to PeachTech Chatbot!
+        </Typography>
+      )}
       {/* メッセージリスト */}
       {messages.map((message, index) => (
         <Box
@@ -121,7 +133,9 @@ const MessageList: React.FC<MessageListProps> = ({ messages, loading }) => {
             height="55"
             style={{ borderRadius: "50%" }}
           />
-          <Typography variant="body1">ゆせくん考え中...</Typography>
+          <Typography variant="body1" py={1} px={2}>
+            ゆせくん考え中...
+          </Typography>
         </Box>
       )}
     </Box>

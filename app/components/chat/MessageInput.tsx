@@ -23,7 +23,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   };
 
   return (
-    <Box width={"100%"} maxWidth={"600px"}>
+    <Box width={{ xs: "80%", sm: "100%" }} maxWidth={"600px"}>
       <TextField
         fullWidth
         variant="outlined"
